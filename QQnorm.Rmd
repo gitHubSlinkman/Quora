@@ -1,0 +1,33 @@
+---
+title: "Ising QQ Normal to diagnose departures from normLITY"
+author: "by Craig W. Slinkman"
+date: "12/10/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r load_packages
+#
+
+#
+```
+
+
+## Using normal probabiliy plots to diagnose departures from Normality
+
+This document shows how to normal quantile-quantiles plots to diagnose departure from normality.  Here after we will abreviate Nnormal Qqantile plots as QQ plots.
+
+To do so we must know what the QQ looks like when we sample from the normal population. Wnen we draw a norml QQ plot from a normal distribution we plot the enpirical quantile for the distribution versus the expected quantile.   Suppose we draw a sample size of 1,000 from a normal population with a popukation mean of 100 and a standard deviation of 20.  I can draw this random sample as follows in R:
+
+```{r draw_normal_sample}
+#
+x <- rnorm(1000, mean=10, sd=20 )
+x[1:10]
+#
+```
+
+
+## Histogram and 

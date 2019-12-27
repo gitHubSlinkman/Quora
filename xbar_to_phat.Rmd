@@ -1,0 +1,19 @@
+---
+title: "R: Computing sample mean and standard deviation using binary data"
+author: "by Craig W. Slinkman"
+date: "11/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The sample pro[potion $\hat{p}$ is simply the sample mean with zero-one data.  WE show this below:
+$$
+\begin{align*}
+    \bar{x} = \frac{\sum_{i=1}^{n} X_i}{n} &&  \text{Defintion of sample mean}
+            =&  \frac{x}{n}                 &&  \text{where x is the number of ones in the sample}
+            
+\end{align*}
+$$
