@@ -1,0 +1,42 @@
+---
+title: "Recommended Statistics Books"
+author: "Craig W. Slinkman"
+date: "1/10/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Recommended Statistics Books
+
+### Introductory statistics texts
+
+1. Lock, Robin, Patti Frazer Lock, Kari Lock Morgan, Dennis F. Lock (2012).  **Statistics: Unlocking the Power of Data**, John Wiley.  ISBN-13: 978-1119315575, ISBN-10: 1119315573.   There are two editions.
+
+If you want to get access the Wiley Website purchase the hardbound editions.  
+
+I like this book because sampling distributions are taught using the bootstrap distribution to introduce the concept of sampling distributions.  I think that this is an excellent approach to learning what statisticians do and the rationale for making inferences.
+
+2. McClave, James T. (Author), P. George Benson, P. George  (Author), and Terry Sincich (Author).  **Statistics for Business Economics** $(13^{th}$ edition), ISBN-13: 978-0134506593, ISBN-10: 0134506596.
+
+This is a more traditional statistics text than **Statistics: Unlocking the Power of Data**.  Is is a fine book especially when discussing multiple regression and regression modeling.
+
+### R and Studio
+
+1. Adair, Roy T. (2019).  **Intro to R**,  DataDict, ISBN: 978-1-7341137-0-9.  If your an Amazon Prime Member this book is available for free.  It is a very good introduction to R and RStudio which is the software I recommend.
+
+2. Lander, Jared, P. (2017)  **R for Everyone**, Second Edition, Addison-Wesley, ISBN-13: 978-0-13-454692-6, ISBN-10: 0-13-454692-X.
+
+While the book's title does exagerate somewhat this is a good book for idividuals who really want to do advance analytical and statistical work with R. I used The first edition for four years before I retired. 
+
+3. Grolemund, Garrett and Hadley Wickham (2017).  **R for Data Science**.  This book is avaible for free [here](https://r4ds.had.co.nz/).
+
+This is a more advanced R book introducing the tidyvwerse which is a set of R packages to aid an analyst to more easily use R on real world problems.  
+
+
+
+
+
+

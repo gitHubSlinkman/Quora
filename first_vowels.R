@@ -5,7 +5,7 @@ library( stringr )                              # Provides a consisstent set
                                                 # of string functions ...
 
 ###############################################################################
-# We will use the baynames package as our source of baby names.  The code     #
+# We will use the babynames package as our source of baby names.  The code    #
 # below will install the babyname packages if you have not installed it       #
 # before.                                                                     #
 ###############################################################################
