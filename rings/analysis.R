@@ -44,7 +44,9 @@ ggscatter( rings,
 
 fit <- lm( price ~ carats, data = rings)
 summary(fit)
-corr(rings)
-sd( ring$carats)
+cor(rings)
+sd( rings$carats)
 sd(rings$price)
 
+slope <- sd(rings$price)/sd(rings$carats)*cor[1,2]
+slope
