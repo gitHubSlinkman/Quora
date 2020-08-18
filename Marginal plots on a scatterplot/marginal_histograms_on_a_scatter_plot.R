@@ -4,7 +4,8 @@
 # You will need to install ggpubr if you if haven't installed it.
 ###############################################################################
 
-install.packages("ggpubr")            # Install package ggpubr
+# install.packages("ggpubr")          # Install package ggpubr if not 
+                                      # installed
 
 library(tidyverse)                    # I live in the the tidyverse
 library(ggpubr)                       # Provides marginal histograms
@@ -45,3 +46,14 @@ ggscatterhist( iris, x = "Sepal.Length",
                margin.params = list(fill = "Species", color = "black", size = 0.2)
 )
 
+###################################################################################
+# We use boxplots instead of histograms.
+###################################################################################
+
+ggscatterhist(
+    iris, x = "Sepal.Length", y = "Sepal.Width",
+    color = "Species", size = 3, alpha = 0.6,
+    palette = c("#00AFBB", "#E7B800", "#FC4E07"),
+    margin.plot = "boxplot",
+    ggtheme = theme_bw()
+)
