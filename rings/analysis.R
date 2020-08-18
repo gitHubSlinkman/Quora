@@ -28,7 +28,7 @@ getwd()
 
 rings <- read_csv( "rings.csv")         # Read the data file ...
 
-# Draw a scatter plot of proce versus carates 
+# Draw a scatter plot of price versus carates 
 
 ggscatter( rings,
            x     = "carats",
@@ -45,8 +45,9 @@ ggscatter( rings,
 fit <- lm( price ~ carats, data = rings)
 summary(fit)
 cor(rings)
+r <- cor(rings)[1,2]
 sd( rings$carats)
 sd(rings$price)
 
-slope <- sd(rings$price)/sd(rings$carats)*cor[1,2]
+slope <- sd(rings$price)/sd(rings$carats)* r
 slope
