@@ -1,0 +1,100 @@
+---
+title: "Meqsure of Skewness and Measures of Location"
+author: "by Craig Slinkman"
+date: "9/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This document will demonstrate the effects of skewness on the mean median and mode.  Examples of symmetric, negatively skewed data, and positively skewed data.  
+
+The R-code for this example will be embedded in this document.  For the answer to the Quora question will be copied and pasted into the Quora for the answers.  
+
+
+## Preperation of R
+
+We need to set up R so that we can perform our analysis.  We do this in the code chunk below.  This code will be executed and included in the output when the document is rendered by knitter.
+
+```{r prepare_R}
+require(tidyverse)
+require(todyverse)    # I live in the tidyverse ...
+require(Lock5withR)   # For body temperature data ...
+require(readr)        # To read Australian age at death data 
+```
+
+
+## The data sets we will use
+There are three data sets that we will use in this analysis.  
+
+### 
+
+The first data set body temperature  (in Fahrenheit)  and pulse rates set used in the statistics text [Statistics: Unlocking the power of data](https://www.wiley.com/en-us/Statistics%3A+Unlocking+the+Power+of+Data%2C+2nd+Edition-p-9781119308843).  I liked this book because it explained sampling distributions and the use of the bootstrap.  There is an R-package called **Lock5withR** that has the bootstrap.
+
+We access the data in the following chunk:
+
+```{r get_body_temperatures}
+###############################################################################
+# I prefer to work with tibbles so I an going to cast the data.frame 
+# BodyTemp50 to a tibble.  We then display the tibble so we all have an idea 
+# of the nature of the data.
+###############################################################################
+
+bodyTemp50 <- as_tibble( BodyTemp50 )
+bodyTemp50
+```
+
+This data consists of 50 body temperatures and pulse rates for a sample of 50 observations.  It also includes the gender of the adult.  the orginal data source is: Shoemaker, "What’s Normal: Temperature, Gender and Heartrate", Journal of Statistics Education,Vol. 4, No. 2 (1996)e of 50 adults.
+
+### Vesuvius data
+
+The Vesuvius data is the interval between eruptions of the Vesuvius volcano in Naples Italy.  It was thevolcano that destroyed Pompei and Herculaneum as the year 79 CE.
+
+[Mt. Vesuvius](https://en.wikipedia.org/wiki/Mount_Vesuvius)  is located kust 9 miles from the City of Naples.  
+
+Wikipedia adds the following:
+
+>Vesuvius has erupted many times since and is the only volcano on the European mainland to have erupted within the last hundred years. Today, it is regarded as one of the most dangerous volcanoes in the world because of the population of 3,000,000 people living near enough to be affected, with 600,000 in the danger zone, making it the most densely populated volcanic region in the world, as well as its tendency towards violent, explosive eruptions.
+
+Clearly we would like to be able to have some valid prediction of when it will erupt.
+
+We read the data in the R-code chunk below and list the first part of the data file so you can see the nature of the data.  
+
+```{r read_vesusvius}
+###############################################################################
+# We build the data path to the data directory for this project and the 
+# construct the full path.  We then read and display the vesuvius tibble.
+###############################################################################
+
+fp <- file.path( getwd(),
+                 "Skeness",
+                 "data",
+                 "Vesiviu.csv" )
+eruptions <- read_csv( fp )
+eruptions
+```
+
+
+
+
+### Austailian 2012 age at death data
+
+This is the age of death for the year 20212 for the country of Austrailai.  I extracted the data from spreadsheet and created a comma-seperated-variable file whern I added some variables.  This data set has the disadvantahe of being  already aggregated but we should be able to use it.
+
+The source of the data is the [Smithosnian Global Volcano Program](https://volcano.si.edu/showreport.cfm?doi=10.5479/si.GVP.BGVN199606-211020).  I only used eruptions in the common era that were historically known.  There is one exception however and this is the very first eruption listed in 479 BCE I used because I wanted to include tge ibnterval for Pompeii destroying eruptions.  We read this data below:  
+
+```{r read_eruptions}
+###############################################################################
+# WE firt form the full path to the data file and then read the data,
+###############################################################################
+
+
+```
+
+
+
+
+
+

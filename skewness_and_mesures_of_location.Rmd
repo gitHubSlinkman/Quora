@@ -1,0 +1,35 @@
+---
+title: "Skewness and its effect on location measures"
+author: "Craig Slinkman"
+date: "9/2/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The document demonstrates the effect that skewness has on the three measures of location that are taught in introductory statistics courses.  The three measure of location or centrality are the mean, the median, and the mode.
+
+We will investigate the effect of the skewness or lack thereof with a negatiuvely a symmetric distribution, a positively skewed distribution, or a negatively skewed distribution.  We will use real data to carry out this analysis. 
+
+# Loading packages
+
+```{r [read]re[are_for_analysis}
+require(tidyverse)                          # I live in the tidyverse ...
+require(readr)                             # Needed to tread csv files ...
+
+wd <- getwd()                               # Get the default working directory
+
+dfp <- file.path( wd,                       # Get path to data files 
+                  "skewness",
+                  "data" )
+
+################################################################################
+# Complete full path to file and then read the file.
+################################################################################
+
+fp <- file.path( dfp,
+                  "age_at_death.csv" )
+age_at_death <- read_csv( fp )
+age_at_death

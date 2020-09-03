@@ -1,26 +1,26 @@
 start_date,sdu,end_date,edu,eruption_certainity,vei,evidence,avtivity_area,year,interval,days
-NA,NA,NA,NA,NA,NA,NA,NA,-217,NA,NA
-0079-10-27,0,0079-10-28,0,Confirmed,5,Historical Observations,NA,79,296,1
-0472-11-05,0,0472-11-06,10,Confirmed,5,Historical Observations,NA,472,393,NA
-0505-11-09,1,NA,1,Uncertain,2,Historical Observations,NA,505,33,NA
-0512-07-08,0,NA,1,Confirmed,4,Historical Observations,NA,512,7,NA
-0685-02-15,1,0685-03-15,1,Confirmed,4,Historical Observations,NA,685,173,28
-0787-10-15,0,0788-01-15,0,Confirmed,3,Historical Observations,Summit and south flank,787,102,NA
-1006-01-15,1,NA,0,Confirmed,3,Historical Observations,NA,1006,219,NA
-1037-01-27,0,NA,0,Confirmed,3,Historical Observations,Summit and south flank (I Monticelli?),1037,31,NA
-1139-06-01,0,1139-06-09,0,Confirmed,3,Historical Observations,NA,1139,102,8
+,,,,,,,,-217,,
+0079-10-27,0,0079-10-28,0,Confirmed,5,Historical Observations,,79,296,1
+0472-11-05,0,0472-11-06,10,Confirmed,5,Historical Observations,,472,393,
+0505-11-09,1,,1,Uncertain,2,Historical Observations,,505,33,
+0512-07-08,0,,1,Confirmed,4,Historical Observations,,512,7,
+0685-02-15,1,0685-03-15,1,Confirmed,4,Historical Observations,,685,173,28
+0787-10-15,0,0788-01-15,0,Confirmed,3,Historical Observations,Summit and south flank,787,102,
+1006-01-15,1,,0,Confirmed,3,Historical Observations,,1006,219,
+1037-01-27,0,,0,Confirmed,3,Historical Observations,Summit and south flank (I Monticelli?),1037,31,
+1139-06-01,0,1139-06-09,0,Confirmed,3,Historical Observations,,1139,102,8
 1631-12-16,0,01/31/32,1,Confirmed,5,Historical Observations,"Summit, SW and S flanks",1631,492,46
-1637-07-01,0,1652-12-15,1,Confirmed,2,Historical Observations,NA,1637,6,5646
-1654-02-25,0,1680-03-28,0,Confirmed,3,Historical Observations,NA,1654,17,9528
-1682-08-12,0,1682-08-22,0,Confirmed,3,Historical Observations,NA,1682,28,10
-1685-10-03,0,1694-04-29,0,Confirmed,3,Historical Observations,NA,1685,3,3130
-1696-07-31,0,1696-08-14,0,Confirmed,2,Historical Observations,NA,1696,11,14
-1697-09-15,0,1698-07-15,0,Confirmed,3,Historical Observations,NA,1697,1,303
+1637-07-01,0,1652-12-15,1,Confirmed,2,Historical Observations,,1637,6,5646
+1654-02-25,0,1680-03-28,0,Confirmed,3,Historical Observations,,1654,17,9528
+1682-08-12,0,1682-08-22,0,Confirmed,3,Historical Observations,,1682,28,10
+1685-10-03,0,1694-04-29,0,Confirmed,3,Historical Observations,,1685,3,3130
+1696-07-31,0,1696-08-14,0,Confirmed,2,Historical Observations,,1696,11,14
+1697-09-15,0,1698-07-15,0,Confirmed,3,Historical Observations,,1697,1,303
 1701-08-01,0,1707-08-22,0,Confirmed,3,Historical Observations,Summit and SW flank,1701,4,2212
 1708-08-14,0,1723-07-08,0,Confirmed,3,Historical Observations,"Summit, upper east and south flanks",1708,7,5441
-1724-09-04,1,1730-04-01,1,Confirmed,3,Historical Observations,NA,1724,16,2035
+1724-09-04,1,1730-04-01,1,Confirmed,3,Historical Observations,,1724,16,2035
 1732-12-25,0,1737-06-04,0,Confirmed,3,Historical Observations,Summit and SW flank,1732,8,1622
-1742-06-15,0,1743-06-16,0,Confirmed,1,Historical Observations,NA,1742,10,366
+1742-06-15,0,1743-06-16,0,Confirmed,1,Historical Observations,,1742,10,366
 1744-11-15,0,1761-01-06,0,Confirmed,3,Historical Observations,"Summit, upper SE, E and lower S flanks",1744,2,5896
 1764-06-15,0,1767-10-27,0,Confirmed,3,Historical Observations,"Summit, upper SW, SE, and NNW flanks",1764,20,1229
 1770-02-15,0,1779-10-26,0,Confirmed,3,Historical Observations,"Summit, N, NE, SE and E flanks",1770,6,3540
@@ -33,6 +33,6 @@ NA,NA,NA,NA,NA,NA,NA,NA,-217,NA,NA
 1855-12-19,0,1861-12-31,0,Confirmed,3,Historical Observations,Summit and SW flank (300-225 m),1855,1,2204
 1864-02-10,0,1868-11-26,0,Confirmed,2,Historical Observations,Summit and upper SE flank,1864,9,1751
 1870-12-15,0,1872-04-30,0,Confirmed,3,Historical Observations,Summit and upper NW and south flanks,1870,6,502
-1874-06-15,1,NA,0,Confirmed,1,NA,NA,1874,4,NA
+1874-06-15,1,,0,Confirmed,1,,,1874,4,
 1875-12-18,0,1906-04-12,0,Confirmed,4,Historical Observations,Summit and upper flanks,1875,1,11072
-1913-07-05,1,1944-04-04,0,Confirmed,3,Historical Observations,Summit and upper flanks,1913,38,11231
+1913-07-05,1,1944-04-04,0,Confirmed,3,Historical Observations,Summit and upper flanks ,1913,38,11231
