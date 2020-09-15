@@ -22,7 +22,7 @@ We need to set up R so that we can perform our analysis.  We do this in the code
 require(tidyverse)
 require(todyverse)    # I live in the tidyverse ...
 require(Lock5withR)   # For body temperature data ...
-require(readr)        # To read Australian age at death data 
+require( cowplot )    # For professional publication graphics ...
 ```
 
 
@@ -48,6 +48,40 @@ bodyTemp50
 
 This data consists of 50 body temperatures and pulse rates for a sample of 50 observations.  It also includes the gender of the adult.  the orginal data source is: Shoemaker, "What’s Normal: Temperature, Gender and Heartrate", Journal of Statistics Education,Vol. 4, No. 2 (1996)e of 50 adults.
 
+### Draw histogram and density diagram
+
+In this section we draw a histogram.  We will use the $log_2(n)$ rule to determine the ideal number of bins in our histogram.  That is the "ideal" number of bins or at least the stating points of the number bin in = s given by the $log_2(50) = `r log2(50)`$.  We round this number to 5 bins.  We know use the R-function **pretty** to determine the bin limits.
+
+```{r compute_bim_limits}
+
+limits <- pretty( BodyTemp50$BodyTemp, 
+                  n = 5,
+                  high.u.bias = 10 )
+```
+
+### Drawing the histogram with ggplot2
+
+We draw the plot using the R-code below:
+
+```{r plot_bodyTemp}
+
+binwidth <- limits[2] - limits[1]
+
+ggplot( BodyTemp50, aes( x = BodyTemp, y = ..density.. )) +
+    geom_histogram( binwidth = limits[2] - limits[1],
+                    color = "black",
+                    fill = "green" ) +
+    geom_density( ) +
+    scale_x_continuous( name = "Body Tempature (Fahrenheit)",
+                       breaks = limits,
+                       label  = limits ) +
+    ylab( "Density" ) +
+    ggtitle( "Human body temperature" ) +
+    theme_cowplot()
+```
+
+This is an example of an approximately symmetric distribution with an outlier.  Note that the outlier is probably an ill student.
+
 ### Vesuvius data
 
 The Vesuvius data is the interval between eruptions of the Vesuvius volcano in Naples Italy.  It was thevolcano that destroyed Pompei and Herculaneum as the year 79 CE.
@@ -69,14 +103,40 @@ We read the data in the R-code chunk below and list the first part of the data f
 ###############################################################################
 
 fp <- file.path( getwd(),
-                 "Skeness",
                  "data",
-                 "Vesiviu.csv" )
+                 "Vesuvius.csv" )
 eruptions <- read_csv( fp )
 eruptions
 ```
 
 
+We plot the Vesuvius data below.
+
+```{r plot_vesuvius_eruption_data}
+```
+
+
+```{r plot_vesuvius_eruption_data}
+
+n <- dim( eruptions )[1]
+
+limits <- pretty( eruptions$interval,
+                  n = 5,
+                  high.u.bias = 10 )
+
+
+ggplot( eruptions, aes( x = interval, y = ..density.. )) +
+    geom_histogram(  binwidth = 50,
+                     color = "black",
+                     fill = "green" ) +
+    geom_density() +
+    scale_x_continuous( name = "Intervals between eruptions (years)",
+                        breaks = limits,
+                        labels = limits ) +
+    ylab( "Density" ) +
+    ggtitle( "Interals between the succesuve eruprions of Vesuvius" ) +
+    theme_cowplot()
+```
 
 
 ### Austailian 2012 age at death data
@@ -87,8 +147,30 @@ The source of the data is the [Smithosnian Global Volcano Program](https://volca
 
 ```{r read_eruptions}
 ###############################################################################
-# WE firt form the full path to the data file and then read the data,
+# We firt form the full path to the data file and then read the data,
 ###############################################################################
+
+fp <- file.path( getwd(),
+                 "data",
+                 "age_at_death.csv" )
+
+age_at_death <- read_csv( fp )
+age_at_death
+
+vnames     <- names( age_at_death )
+vnames[4]  <- "males_nm"
+vnames[5]  <- "males_m"
+vnames[6]  <- "males_w"
+vnames[7]  <- "males_d"
+vnames[8]  <- "males_t"
+vnames[9]  <-"females_mm"
+vnames[10] <- "females_m"
+vnames[11] <- "femalws_w"
+vnames[12] <- "females_d"
+vnames[13] <- "females_t"
+
+
+
 
 
 ```
