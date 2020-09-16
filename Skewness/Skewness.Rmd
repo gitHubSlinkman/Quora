@@ -7,6 +7,7 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+
 ```
 
 This document will demonstrate the effects of skewness on the mean median and mode.  Examples of symmetric, negatively skewed data, and positively skewed data.  
@@ -19,12 +20,21 @@ The R-code for this example will be embedded in this document.  For the answer t
 We need to set up R so that we can perform our analysis.  We do this in the code chunk below.  This code will be executed and included in the output when the document is rendered by knitter.
 
 ```{r prepare_R}
+require( knitr)       # To set global directory
 require(tidyverse)
-require(todyverse)    # I live in the tidyverse ...
 require(Lock5withR)   # For body temperature data ...
 require( cowplot )    # For professional publication graphics ...
 ```
 
+```{r set_eorking_directory}
+wd <- file.path("D:/",
+                "R-Projects",
+                "Quora",
+                "Skewness" ) 
+
+knitr::opts_knit$set(root.dir = wd )
+getwd()
+```
 
 ## The data sets we will use
 There are three data sets that we will use in this analysis.  
@@ -42,17 +52,30 @@ We access the data in the following chunk:
 # of the nature of the data.
 ###############################################################################
 
-bodyTemp50 <- as_tibble( BodyTemp50 )
-bodyTemp50
+BodyTemp50 <- as_tibble( BodyTemp50 )
+BodyTemp50
 ```
 
-This data consists of 50 body temperatures and pulse rates for a sample of 50 observations.  It also includes the gender of the adult.  the orginal data source is: Shoemaker, "What’s Normal: Temperature, Gender and Heartrate", Journal of Statistics Education,Vol. 4, No. 2 (1996)e of 50 adults.
+This data consists of 50 body temperatures and pulse rates for a sample of 50 observations.  It also includes the gender of the adult.  the orginal data source is: Shoemaker, "What is  Normal  Temperature, Gender and Heart Rate", Journal of Statistics Education,Vol. 4, No. 2 (1996)e of 50 adults.
 
 ### Draw histogram and density diagram
 
 In this section we draw a histogram.  We will use the $log_2(n)$ rule to determine the ideal number of bins in our histogram.  That is the "ideal" number of bins or at least the stating points of the number bin in = s given by the $log_2(50) = `r log2(50)`$.  We round this number to 5 bins.  We know use the R-function **pretty** to determine the bin limits.
 
-```{r compute_bim_limits}
+```{r compute_statistics}
+
+###############################################################################
+# Compute mean, median, and mode, see we can plot their position on the
+# histogram we will draw.
+###############################################################################
+
+mean_bt   <- round( mean( BodyTemp50$BodyTemp ),1 )
+median_bt <- round( median( BodyTemp50$BodyTemp ),1)
+mode_bt   <- mode(  BodyTemp50$BodyTemp )
+
+mean_bt
+median_bt
+mode_bt
 
 limits <- pretty( BodyTemp50$BodyTemp, 
                   n = 5,
@@ -63,30 +86,127 @@ limits <- pretty( BodyTemp50$BodyTemp,
 
 We draw the plot using the R-code below:
 
-```{r plot_bodyTemp}
+```{r plot_bodyTemp50}
 
-binwidth <- limits[2] - limits[1]
+scale_y <- seq( from = 0,
+                to   = 30,
+                by   = 5 )
 
-ggplot( BodyTemp50, aes( x = BodyTemp, y = ..density.. )) +
-    geom_histogram( binwidth = limits[2] - limits[1],
-                    color = "black",
-                    fill = "green" ) +
-    geom_density( ) +
-    scale_x_continuous( name = "Body Tempature (Fahrenheit)",
-                       breaks = limits,
-                       label  = limits ) +
-    ylab( "Density" ) +
-    ggtitle( "Human body temperature" ) +
-    theme_cowplot()
+ mean_bt
+ median_bt
+ mode_bt
+ 
+temp50 <- 
+    ggplot( BodyTemp50, aes( x = BodyTemp )) +
+        geom_histogram( binwidth = limits[2] - limits[1],
+                      color = "black",
+                       fill = "white" ) +
+        geom_vline( xintercept = mean_bt,   color = "red") +
+        geom_vline( xintercept = median_bt, color="blue")  +
+        annotate( "text",
+                   x = 96, y = 25,
+                   label = "Mean:   98.3",
+                   hjust = 0,
+                   color = "red") +
+         annotate( "text",
+                    x = 96, y = 23,
+                    label = "Median: 98.2",
+                    hjust = 0,
+                    color = "blue") +
+         annotate( "text",
+                     x = 96, y = 21,
+                     label = "Mode:   Undefined",
+                     hjust = 0,
+                     color = "black" ) +
+         scale_x_continuous( name = "Body Tempature (Fahrenheit)",
+                             breaks = limits,
+                             label  = limits ) +
+         scale_y_continuous( name = "Frequency",
+                             breaks = scale_y,
+                             labels = scale_y ) +
+         ylab( "Frequency" ) +
+         ggtitle( "Human body temperature with outlier removed" ) +
+         theme_cowplot()
+
+fp <- file.path( wd,
+                 "plots",
+                 "BodyTemp50.jpeg")
+
+save_plot( fp, temp50 )
+
+temp50
+
 ```
 
-This is an example of an approximately symmetric distribution with an outlier.  Note that the outlier is probably an ill student.
+
+This is an example of an approximately symmetric distribution with an outlier.  Note that the outlier is probably an ill student.  Note that that this observation move the mean to the right of the median.  We probably should remove this outlier.  
+
+```{r  remove_outlier}
+
+BodyTemp49 = 
+    BodyTemp50 %>% 
+        filter( BodyTemp < 100 ) 
+        
+mean_bt   <- round( mean( BodyTemp50$BodyTemp ),1 )
+median_bt <- round( median( BodyTemp50$BodyTemp ),1)
+mode_bt   <- mode(  BodyTemp50$BodyTemp )
+        
+    
+ mean_bt
+ median_bt
+ mode_bt
+ 
+temp49 <-  
+    ggplot( BodyTemp49, aes( x = BodyTemp )) +
+        geom_histogram( binwidth = limits[2] - limits[1],
+                        color = "black",
+                        fill = "white" ) +
+        geom_vline( xintercept = mean_bt,   color = "red") +
+        geom_vline( xintercept = median_bt, color="blue")  +
+        annotate( "text",
+                  x = 96, y = 25,
+                  label = "Mean:   98.3",
+                  hjust = 0,
+                  color = "red") +
+         annotate( "text",
+                    x = 96, y = 23,
+                    label = "Median: 98.2",
+                    hjust = 0,
+                    color = "blue") +
+         annotate( "text",
+                    x = 96, y = 21,
+                    label = "Mode:   Undefined",
+                    hjust = 0,
+                    color = "black" ) +
+         scale_x_continuous( name = "Body Tempature (Fahrenheit)",
+                             breaks = limits,
+                             label  = limits ) +
+         scale_y_continuous( name = "Frequency",
+                             breaks = scale_y,
+                             labels = scale_y ) +
+         ggtitle( "Human body temperature with outlier removed" ) +
+         theme_cowplot()
+
+
+fp <- file.path( wd,
+                 "plots",
+                 "BodyTemp49.jpeg")
+
+save_plot( fp, temp50 )
+
+temp50
+```
+
+ 
+After removed the "outlier" the values of the mean and median did not change.  
+This means that the observation was not an outlier and we should use the orginal data set.
+
 
 ### Vesuvius data
 
-The Vesuvius data is the interval between eruptions of the Vesuvius volcano in Naples Italy.  It was thevolcano that destroyed Pompei and Herculaneum as the year 79 CE.
+The Vesuvius data is the interval between eruptions of the Vesuvius volcano in Naples Italy.  It was the volcano that destroyed Pompeii and Herculaneum as the year 79 CE.
 
-[Mt. Vesuvius](https://en.wikipedia.org/wiki/Mount_Vesuvius)  is located kust 9 miles from the City of Naples.  
+[Mt. Vesuvius](https://en.wikipedia.org/wiki/Mount_Vesuvius)  is located just 9 miles from the City of Naples.  
 
 Wikipedia adds the following:
 
@@ -99,41 +219,128 @@ We read the data in the R-code chunk below and list the first part of the data f
 ```{r read_vesusvius}
 ###############################################################################
 # We build the data path to the data directory for this project and the 
-# construct the full path.  We then read and display the vesuvius tibble.
+# construct the full path.
 ###############################################################################
 
 fp <- file.path( getwd(),
                  "data",
                  "Vesuvius.csv" )
-eruptions <- read_csv( fp )
-eruptions
+
+
+###############################################################################
+# We read the data and select the two variavles we will used in this example,
+# years, and interval.
+###############################################################################
+
+vesuvius <- read_csv( fp )
+
+vesuvius <- 
+    vesuvius %>% 
+       select( year, interval)
+
+vesuvius
+            
+```
+Let's compute the mean, median, and mode of interval"
+
+```{r compute_interval_location}
+###############################################################################
+# It ia convenient to extract interval from the tibble for cleaning (There is
+# one missing observation. ) for computational purposes.  The NA value is in 
+# the first row/
+################################################################################
+
+interval <- 
+    vesuvius %>% 
+        pull( interval )
+interval
+
+interval <- interval[2:length(interval)]
+interval 
+
+
+################################################################################
+# We compute the mean, median, and mode of interval.  We tound them to 1
+# decimal place.  Note that because the mode uses a data value that occurs 
+# most often it will already be an integer value and therefore does not need to
+# be rounded.
+################################################################################
+
+mean_interval  <- round( mean( interval  ), 1 )
+mean_interval
+
+median_interval <- round( median( interval, ), 1 )
+median_interval
+
+mode_interval <- mode( interval )
+mode_interval
+
 ```
 
+Once again we see that the sample mode does not exist in the data.  
 
 We plot the Vesuvius data below.
 
-```{r plot_vesuvius_eruption_data}
-```
-
 
 ```{r plot_vesuvius_eruption_data}
 
-n <- dim( eruptions )[1]
+################################################################################
+# We compute the sample size and then use.  We then use the rule of thumb
+# that  the number of bins in the histogram should be close to log to 
+# base 2 of the number of observations. 
+#
+# Sorry I don't have a reference for this rule but it seems to work well.
+#############################################################################
 
-limits <- pretty( eruptions$interval,
-                  n = 5,
+n <- dim( vesuvius )[1]
+bins <- log2( n )
+bins
+
+
+limits <- pretty( vesuvius$interval,
+                  n = bins,
                   high.u.bias = 10 )
 
+############################################################################
+# The bin_width is the difference between any two succesive limits.  We
+# use the first two.This must be a positive interger so we subtract the
+# limit[1] from Limit[2].
+############################################################################
 
-ggplot( eruptions, aes( x = interval, y = ..density.. )) +
-    geom_histogram(  binwidth = 50,
+bin_width <- limits[2] - limits[1]
+
+###########################################################################
+# We plot this histogram including the mean and the median as vertical
+# lines with a key.
+###########################################################################
+
+ggplot( vesuvius, aes( x = interval )) +
+    geom_histogram( binwidth =  bin_width,
                      color = "black",
-                     fill = "green" ) +
-    geom_density() +
+                     fill = "white" ) +
+    geom_vline( xintercept = mean_interval,
+                color = "red") +
+    geom_vline( xintercept = median_interval,
+                color = "blue" ) +
+    annotate( "text",
+              x = 100, y = 29,
+              label = "Mean:    59.2",
+              hjust = 0,
+              color = "red") +
+    annotate( "text",
+              x = 100, y = 27,
+              label = "Median: 12.0",
+              hjust = 0,
+              color = "darkblue" ) +
+    annotate( "text",
+              x = 100, y = 25,
+              label = "Mode:   Undefined",
+              hjust = 0,
+              color = "black" ) +
     scale_x_continuous( name = "Intervals between eruptions (years)",
                         breaks = limits,
                         labels = limits ) +
-    ylab( "Density" ) +
+    ylab( "Frequency" ) +
     ggtitle( "Interals between the succesuve eruprions of Vesuvius" ) +
     theme_cowplot()
 ```
@@ -141,33 +348,50 @@ ggplot( eruptions, aes( x = interval, y = ..density.. )) +
 
 ### Austailian 2012 age at death data
 
-This is the age of death for the year 20212 for the country of Austrailai.  I extracted the data from spreadsheet and created a comma-seperated-variable file whern I added some variables.  This data set has the disadvantahe of being  already aggregated but we should be able to use it.
+This is the age of death for the year 20212 for the country of Australian.  I extracted the data from spreadsheet and created a comma-separated-variable file when I added some variables.  This data set has the disadvantage of being  already aggregated but we should be able to use it.
 
-The source of the data is the [Smithosnian Global Volcano Program](https://volcano.si.edu/showreport.cfm?doi=10.5479/si.GVP.BGVN199606-211020).  I only used eruptions in the common era that were historically known.  There is one exception however and this is the very first eruption listed in 479 BCE I used because I wanted to include tge ibnterval for Pompeii destroying eruptions.  We read this data below:  
+The source of the data is the [Smithosnian Global Volcano Program](https://volcano.si.edu/showreport.cfm?doi=10.5479/si.GVP.BGVN199606-211020).  I only used eruptions in the common era that were historically known.  There is one exception however and this is the very first eruption listed in 479 BCE I used because I wanted to include the interval for Pompeii destroying eruptions.  We read first clean the environment:
+
+```{r clean_environment}
+rm( list = ls())
+```
+
+and then read our data.  As usual I display the tibble to confirm that we
+have the data we want:
 
 ```{r read_eruptions}
-###############################################################################
-# We firt form the full path to the data file and then read the data,
-###############################################################################
+############################################################################# # We first form the full path to the data file and then read the data. We
+# then display the tibble for confirmation.
+#############################################################################
 
 fp <- file.path( getwd(),
                  "data",
                  "age_at_death.csv" )
 
-age_at_death <- read_csv( fp )
+age_at_death <- read.csv( fp )
 age_at_death
+```
 
-vnames     <- names( age_at_death )
-vnames[4]  <- "males_nm"
-vnames[5]  <- "males_m"
-vnames[6]  <- "males_w"
-vnames[7]  <- "males_d"
-vnames[8]  <- "males_t"
-vnames[9]  <-"females_mm"
-vnames[10] <- "females_m"
-vnames[11] <- "femalws_w"
-vnames[12] <- "females_d"
-vnames[13] <- "females_t"
+Noe that this data has all ready be tabulated.  To get a realistic histogram
+I an going to use this table to create a histogram that that has exactly the same frequency counts.  This will allow me to change the bin-width of the
+histogram.  I will also change the variable named 'lower_bound' to 'lower' and 'Upper_bound'(Note the spelling error!) to upper.
+
+We must also compute the total frequency from the male's frequency and the
+female's frequency.  We can do this in one statement using the deplyr package:
+
+
+```{r build_simplified_tibble}
+
+aad <- 
+    age_at_death %>% 
+        rename( lower = lower_bound,
+                upper = Upper_bound ) %>% 
+                  mutate( frequency = M_total + F_total) %>%
+                    select( lower,
+                            upper,
+                            frequency )
+aad
+
 
 
 
@@ -175,6 +399,13 @@ vnames[13] <- "females_t"
 
 ```
 
+Now we will use Monte Carlo simulation to build the a simulated raw data file with exactly the same frequency counts as our data table.
+
+First for debugging purposes so we get the same random number streams every time we knit this document (for debugging purposes.)
+
+```{r set_random_number_seed}
+set.seed( 11235813 )
+```
 
 
 
