@@ -19,11 +19,12 @@ The R-code for this example will be embedded in this document.  For the answer t
 
 We need to set up R so that we can perform our analysis.  We do this in the code chunk below.  This code will be executed and included in the output when the document is rendered by knitter.
 
-```{r prepare_R}
+```{r prepare_rmarkdown}
 require( knitr)       # To set global directory
 require(tidyverse)
-require(Lock5withR)   # For body temperature data ...
-require( cowplot )    # For professional publication graphics ...
+require(Lock5withR)    # For body temperature data ...
+require( DescTools )   # To compute the mode ...
+require( cowplot )     # For professional publication graphics ...
 ```
 
 ```{r set_eorking_directory}
@@ -71,7 +72,7 @@ In this section we draw a histogram.  We will use the $log_2(n)$ rule to determi
 
 mean_bt   <- round( mean( BodyTemp50$BodyTemp ),1 )
 median_bt <- round( median( BodyTemp50$BodyTemp ),1)
-mode_bt   <- mode(  BodyTemp50$BodyTemp )
+mode_bt   <- Mode(  BodyTemp50$BodyTemp, na.rm = TRUE )
 
 mean_bt
 median_bt
@@ -96,6 +97,8 @@ scale_y <- seq( from = 0,
  median_bt
  mode_bt
  
+ 
+ 
 temp50 <- 
     ggplot( BodyTemp50, aes( x = BodyTemp )) +
         geom_histogram( binwidth = limits[2] - limits[1],
@@ -115,7 +118,7 @@ temp50 <-
                     color = "blue") +
          annotate( "text",
                      x = 96, y = 21,
-                     label = "Mode:   Undefined",
+                     label = "Mode:   98.2",
                      hjust = 0,
                      color = "black" ) +
          scale_x_continuous( name = "Body Tempature (Fahrenheit)",
@@ -147,9 +150,9 @@ BodyTemp49 =
     BodyTemp50 %>% 
         filter( BodyTemp < 100 ) 
         
-mean_bt   <- round( mean( BodyTemp50$BodyTemp ),1 )
-median_bt <- round( median( BodyTemp50$BodyTemp ),1)
-mode_bt   <- mode(  BodyTemp50$BodyTemp )
+mean_bt   <- round( mean( BodyTemp49$BodyTemp ),1 )
+median_bt <- round( median( BodyTemp49$BodyTemp ),1)
+mode_bt   <- Mode(  BodyTemp49$BodyTemp, na.rm = TRUE )
         
     
  mean_bt
@@ -165,7 +168,7 @@ temp49 <-
         geom_vline( xintercept = median_bt, color="blue")  +
         annotate( "text",
                   x = 96, y = 25,
-                  label = "Mean:   98.3",
+                  label = "Mean:   98.2",
                   hjust = 0,
                   color = "red") +
          annotate( "text",
@@ -175,7 +178,7 @@ temp49 <-
                     color = "blue") +
          annotate( "text",
                     x = 96, y = 21,
-                    label = "Mode:   Undefined",
+                    label = "Mode:  98.2",
                     hjust = 0,
                     color = "black" ) +
          scale_x_continuous( name = "Body Tempature (Fahrenheit)",
@@ -266,14 +269,11 @@ interval
 # be rounded.
 ################################################################################
 
-mean_interval  <- round( mean( interval  ), 1 )
-mean_interval
+( mean_interval  <- round( mean( interval  ), 1 ))
 
-median_interval <- round( median( interval, ), 1 )
-median_interval
+( median_interval <- round( median( interval, ), 1 ))
 
-mode_interval <- mode( interval )
-mode_interval
+( mode_interval <- Mode( interval ))
 
 ```
 
@@ -284,7 +284,7 @@ We plot the Vesuvius data below.
 
 ```{r plot_vesuvius_eruption_data}
 
-################################################################################
+#############################################################################
 # We compute the sample size and then use.  We then use the rule of thumb
 # that  the number of bins in the histogram should be close to log to 
 # base 2 of the number of observations. 
@@ -314,6 +314,7 @@ bin_width <- limits[2] - limits[1]
 # lines with a key.
 ###########################################################################
 
+vesuvius <- 
 ggplot( vesuvius, aes( x = interval )) +
     geom_histogram( binwidth =  bin_width,
                      color = "black",
@@ -322,6 +323,8 @@ ggplot( vesuvius, aes( x = interval )) +
                 color = "red") +
     geom_vline( xintercept = median_interval,
                 color = "blue" ) +
+    geom_vline( xintercept = 6,
+                color = "black" ) +
     annotate( "text",
               x = 100, y = 29,
               label = "Mean:    59.2",
@@ -334,15 +337,24 @@ ggplot( vesuvius, aes( x = interval )) +
               color = "darkblue" ) +
     annotate( "text",
               x = 100, y = 25,
-              label = "Mode:   Undefined",
+              label = "Mode:    6.0",
               hjust = 0,
               color = "black" ) +
     scale_x_continuous( name = "Intervals between eruptions (years)",
                         breaks = limits,
                         labels = limits ) +
     ylab( "Frequency" ) +
-    ggtitle( "Interals between the succesuve eruprions of Vesuvius" ) +
+    ggtitle( "Years between the succesive eruprions of Vesuvius" ) +
     theme_cowplot()
+
+fp <- file.path( wd,
+                 "plots",
+                 "vesuvius.jpeg")
+
+save_plot( fp, vesuvius )
+
+vesuvius
+
 ```
 
 
@@ -408,6 +420,125 @@ set.seed( 11235813 )
 ```
 
 
+#############################################################################
+# Now we create a sample that will yedild the the frequency counts that
+# are the  are in the 2012 Austrailian Age at Death table. We  start by 
+and upper bounds# creating an empty vector of ages.
+#############################################################################
 
+```{r create_an_empty_integer_vector}
+
+age <- c()
+```
+
+The upper bound of the of the first row should be equal to one.  We correct
+this below:
+
+```{r correct_upper_bound_of_row}
+
+aad$upper[1] = 1
+aad
+```
+
+Now we loop through the rows in the tibble **aad** creating uniform random variables.  The number of variables created is given by the frequency.  The lower and upper bound are given by lower and upper bounds of **aad**. 
+
+Note that because we are using ages we will take the floor random number.
+
+```{r simulate_sample}
+
+for( row in 1:dim(aad)[1]){
+    l <- aad$lower[row]
+    u <- aad$upper[row]
+    f <- aad$frequency[row]
+    s <-floor( runif( f, l, u))
+    age <- c( age, s ) 
+}
+```
+
+We now compute the mean, median, amd mode of the age_at_death.
+
+```{r compute_loactions_of_age}
+
+mean_age <- mean( age )
+mean_age
+
+median_age <- median( age )
+median_age
+
+mode_age <- Mode( age, na.rm = TRUE )
+mode_age
+
+```
+
+
+
+Now we draw a histogram of the tibble.  As before we will use the $log_2$ rule and the R function pretty to determine the bin-boundaries.
+
+```{r plot_age_at_death}
+
+n    <- length( age )
+bins <- log2( n )
+scale_x <- seq( from = 0,
+                to   = 110,
+                by   = 10 )
+
+scale_y <- seq( from = 0, 
+                to = 30000,
+                by = 5000 )
+
+
+plot_age_at_death <- 
+    ggplot( tibble( age), aes( x = age )) +
+        geom_histogram( binwidth = 5,
+                        color = "black",
+                        fill = "white" ) +
+        geom_vline( xintercept = mean_age,
+                    color = "red" ) +
+        geom_vline( xintercept = median_age,
+                    color = "darkblue" ) +
+        geom_vline( xintercept = mode_age,
+                    color = "orange" ) +
+        annotate( "text", 
+                  x = 10, y = 25000,
+                  label = "Mean:   76.1",
+                  hjust = 0,
+                  color = "red" ) +
+        annotate( "text",
+                  x = 10, y=24000,
+                  label = "Median: 81.0",
+                  hjust = 0,
+                  color = "darkblue" ) +
+        annotate( "text",
+                  x = 10, y = 23000,
+                  label = "Mode:   88.0",
+                  hjust = 0,
+                  color = "orange" ) +
+        scale_x_continuous( name = "Age at death",
+                            breaks = scale_x,
+                            label = scale_x ) +
+        scale_y_continuous( name = "Frequency",
+                            breaks = scale_y,
+                            label = format( scale_y,
+                                            digits = 5,
+                                            big.mark = "," )) +
+        xlab( "Age at death") +
+        ylab( "Frequency") +
+        ggtitle( "2012 Australian Ages at Death" ) +
+        theme_cowplot()
+
+
+
+fp <- file.path( "D:/R-Projects",
+                 "Quora",
+                 "Skewness",
+                 "plots",
+                 "age_at_death.jpeg")
+
+save_plot( fp, plot_age_at_death )
+
+plot_age_at_death
+    
+
+```
 
 
