@@ -1,0 +1,92 @@
+---
+title: "Geometric distribution question"
+author: "Craig Slinkman"
+date: "11/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+My interpretation of your question. (Remark use full sentences to write your question.  It will save everybody time)
+
+> Suppose we have a geometriuc distribution with a variabnce of 2.0.  Compute the probability of $Pr( 5 \le X \le 8 ).probability 
+
+We will answer this question in three parts:
+
+* Computing the probability of success from the variance.
+* Computing the answer using the probability mass function.
+* Computing the probability using the cumulative distribution function.
+
+### Computing the probability of success from the variance
+
+We are given the variance.  The equation for computing the variance of a geometric distribution with parameter $p$ is 
+
+$$Var(X) = \frac{1-p}{p^2}$$
+
+Thus we need to solve this equation when $Var(X)=2$.  Hence we have:
+
+$$\frac{1-p}{p^2} = 2$$
+
+We multiply both sides by $p^2$ to obtain'
+'
+$$1-p = 2 p^2$$
+Subtract $-2p^2$ from both sides:
+
+$$-2 p^2 -p + 1 = 0$$
+
+We can factor the above equation to get
+
+$$-(2p - 1)(p+1)=0$$
+Therefore we obtain two equations:
+
+$$$2p-1=0\$$
+and 
+$$p+1 = 0$$
+Which gives the following solution set
+
+Now since $p$ is the probability of success and must be between zero and 1.  The answer to that $p = 1/2$. 
+
+We check this by substituting into the equation for the variance of the geometric distribution:
+
+$$Var(X|p=0.5) =  \frac{1-p}{p^2} = \frac{1-0.5}{0.5^2} = \frac{0.5}{0.25} = 2$$
+So the solution to the quadratic question is 
+
+Now we must compute the individual probabilities using the geometric distribution's probability mass function.
+
+The equation for the probability mass function is:
+
+$$Pr(X=k|p) = p(1-p)^{k-1}$$
+We have $p=0.5$, Substituting this value in the above equation we have:
+
+Pr(X=k|p=0.5) = 0.5 \cdot (1-0.5)^{k-1} = p^k$$
+
+```{r}
+p5 <- 0.5^5
+p6 <- 0.5^6
+p7 <- 0.5^7
+p8 <- 0.5^8
+
+p58 = p5 + p6 + p7 +p8
+
+```
+
+
+Now we can compute the individual probabilities:
+
+$$Pr(X=5|p=0.5)`= `r p5`$$
+$$Pr(x=6|p=0.5) = `r p6`$$
+$$Pr(x=7|p=0.5)  = `r p7`$$
+$$Pr(x= 8|p-0.5)   = `r p8`$$
+
+Thus we have:
+$$Pr(5 \le X \le 8) = `r p5` + `r p6` + 'r p7` + `r p8` = `r p58`$$
+
+### Computing the answer using the cumulative distribution function
+
+
+ 
+```
+

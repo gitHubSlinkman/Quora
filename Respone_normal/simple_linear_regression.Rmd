@@ -1,0 +1,236 @@
+---
+title: "R Notebook: Simulating regreesion with non-norrmal response variables"
+output: html_notebook
+---
+
+This example shows that the response variable of a simple linear regression provided that the error terms are normally distributed.
+
+We will show this by simulating a regression model between steps walked versus miles  walked.  This example is roughly based on my experience as walking.
+
+We will simulate walks between 1 and 5 miles.  This will be an experiment.  We walk 100 walks because I wish ti have enough points to draw nice looking histograms.  
+
+We start by loading the R-packages to carry out our simulation.
+
+```{r}
+library( tidyverse )                    # I live in the tidyverse.
+library( cowplot )                      # Extensions to ggplot that I use. use.############################################################################
+# Load function definitions
+################################################################################
+
+################################################################################
+# The following function is use to draw normal quantile-quantile plots.
+################################################################################
+
+source('D:/R-Projects/Rsource/plot_qq_norm.R')
+
+``` 
+
+
+
+## Createing the predictor variables
+
+In this section we create the proedictorvariable $miles$. This is the number of miles walks.  We will need a value of every walk.  There are 5 observation in each replication.  Each replication of the experiment has 5 observations.  Our replication is defined by
+
+```{r}
+replication <- 1:5                      # Define a single replication of the experiment 
+
+replication
+```
+
+Wec create  twenty replications with a single individual using Stoval Park oval as our test area.
+Our miles variables for all walks is:
+
+```{r}
+miles <- rep( replication, 20)         # Make twenty copies of the replications.
+
+miles
+```
+
+The population model is simple linear regression:
+
+$$Y = \beta_0 + \beta_1 X + e$$
+
+In this model $Y$ is the respinse variabke, $\beta_0$, is the population intercept, $\beta_1$ is the slope of the regression line, and $e$ are the error terms.  For this study based on my walks. We use the following values for the population.
+
+$$\beta_0 = 1900$$
+$$\beta_1 = 1950$$
+The error terms are normally and identicall distributed with a standard deviation of 
+
+$$\sigma = 500$$
+We can know contruct the relationship between the thoretical regression line.  The expected values (thoretical mean for a given predition variable) are given by
+
+$$E[Y|X=x] = \beta_0 + \beta_1  x$$
+
+For example to obtain the mean number of steps per mile we substitue $x = 1$ into the above equation to obtain
+
+$$E[Y|X=1] = 1900 + 1950 \cdot 1 = `r round( 1900 + 1050 * 1)`$$
+This is the meav value of the reponse value of the steps required to walk 1 mile.  We automate this in R as follows:
+
+```{r}
+mean_steps = 1900 + 1950 * miles
+
+mean_steps
+```
+
+
+Now the observed value also contains the random error.  We draw from a normal distribution with a mean of zero and standard deviation of 500.
+
+```{r}
+e <- rnorm( 100,mean = 0, sd = 500 )
+
+e
+```
+
+To obtain the observed values of the response variable we add the random error turns to the
+expected value of the response variable.  That is,
+
+$$y = E[Y|x=x] + e$$
+we do this ny adding the random error terms to the mean number of steps.
+
+```{r}
+steps <- mean_steps + e                      # Compute observed values.
+steps <- round( steps )                 # Round to zero decimal places
+
+steps                                   # Display steps
+```
+
+The functions we are using in R expect the data to be either in a data.frame or a tibble.  We create a tibble below:
+
+```{r}
+experiment <- tibble( steps, miles )
+```
+
+This is our sample data.  Let's plot the distribution of the predictor variable $miles$.
+
+```{r}
+experiment <- 
+    tibble( steps, miles)
+
+experiment
+
+```
+Note that we display a tibble only the first 10 rows are displayed. 
+
+
+```{r}
+experiment %>% 
+    ggplot( aes( x = miles )) +
+        geom_histogram( color = "black",
+                        fill  = "green" ) +
+        xlab( "Miles walked ") +
+        ylab( "Frequency" ) +
+        ggtitle( "Histogram distance walked ") +
+        theme_cowplot()
+        
+```
+The distribution of the miles walked is definitely not normally distributed. In fact, it is an uniform distribution.
+
+Now let dway a histogram of the mean values 
+
+```{r}
+tibble( mean_steps ) %>%
+    ggplot( aes( x = mean_steps )) +
+        geom_histogram( color = "black",
+                        fill  = "green") +
+        xlab( "Miles walked") +
+        ylab("Frequency" ) +
+        ggtitle( "Mean steps walked") +
+        theme_cowplot()
+```
+
+Note that this is definately not a normal distribution.
+
+Now lets look at the distribution
+of the error terms.
+
+```{r}
+my_bins <-
+    round( log2( 100 ))
+
+my_breaks <- pretty( e,
+                     bins  = my_bins,
+                     min.n = 5,
+                     hugh.u.bias = 10 )
+
+my_binwidth <- my_breaks[2] - my_breaks[1]
+
+
+tibble( e ) %>% 
+    ggplot( aes( x = e, y = ..density.. )) +
+        geom_histogram( binwidth = my_binwidth, 
+                        color = "black",
+                        fill  = "yellow" ) +
+    scale_x_continuous( name   = "Random error",
+                        breaks = my_breaks,
+                        label  = my_breaks ) +
+    ylab( "Density" ) + 
+    ggtitle( "Distribution of random errors") +
+    theme_cowplot()
+```
+
+Thr distribution is negatively skewed since the lower tail is longer than the upper tail.  This may be due to an outlier.  It is virtually ompossible to assess the normality of data with the histogram.  Therefore we will use a normal quantile-quantile plot. 
+
+I have borrowed from the University of Iwoa R-code from there stat department.  You can find the tutorial I found thid in [here](http://homepage.stat.uiowa.edu/~luke/classes/STAT4580/qqpp.html). I have changed some of this code to fit by R-prejudices.  My  altered version can be found on GitHub in my project.  The URL of this file is [here](https://github.com/gitHubSlinkman/Rsource/blob/master/plot_qq_norm.R) https://github.com/gitHubSlinkman/Rsource/blob/master/plot_qq_norm.R
+
+```{r}
+plot_qq_norm( variable = e,
+              variable_name = "Random errors",
+              plot_title = "Normal QQ plot of trandom errors" )
+```
+
+The nlack dots are the quantiles of tje random errors versus the standard normal distribution quantiles.  If the distribution is normal this should be a straight line.  Because of sampling error it can be difficult to assess the noermlity as the distributions slivers like a snale.  Look at the last point on the right.  It look likes the snake is turning to the right.  This is a normal distribution because we generated it in R using probability theory.  The wiggle is caused by random variation.
+
+The question becomes how can we tell if the line is approximately straight.  You will note that the points fall on a set of gay lines.  These lines ar generated so that the outer most line is at approximately 95% confidence bounds.  We judge a sample to be normally distributed is its values fall in the grey area.  We  backgound of the graph of there is a kink in the line we judge the data to not be normally distributed.
+
+So are conclussion it that the data is not normally distributed.
+
+Now we can generate what would what the values of the the sample would be by adding the error term to the mean value of the response variable.
+
+```{r}
+mean_steps <- beta0 + beta1 * miles
+steps <- 1900 +1950 * miles
+
+```
+
+Recall form algebra that this will be a straight line.  
+
+Now we added the random error to the values of mean_steps fiving what in the real world be ther observed number of steps.  These will be rounded to zero decimal places as we usually don't talk about fractional steps.
+
+```{r}
+steps <- mean_steps + e
+steps <- round( steps )
+
+steps
+```
+
+Now we will draw the scatter plot of steps versus miles.
+
+```{r}
+tibble( miles, mean_steps, steps ) %>% 
+    ggplot( aes( x = miles, y = steps )) +
+        geom_point( ) +
+    xlab( "Miles walked" ) +
+    ylab( "Steps walked ") +
+    theme_cowplot()
+```
+
+
+```{r}
+```
+
+Lets add the the correct theoretical mean function.  We will use the color "black" for this function and make it a line of dashes for the color blind.
+
+
+```{r}
+tibble( miles, mean_steps, steps ) %>% 
+    ggplot( aes( x = miles, y = steps )) +
+        geom_point( ) +
+    geom_abline( intercept = 1900,
+                 slope = 1950,
+                 color = "black",
+                 linetype = 2 ) +
+    xlab( "Miles walked" ) +
+    ylab( "Steps walked ") +
+    theme_cowplot()
+```
+

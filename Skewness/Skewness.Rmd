@@ -7,7 +7,6 @@ output: html_document
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-
 ```
 
 This document will demonstrate the effects of skewness on the mean median and mode.  Examples of symmetric, negatively skewed data, and positively skewed data.  
@@ -27,7 +26,7 @@ require( DescTools )   # To compute the mode ...
 require( cowplot )     # For professional publication graphics ...
 ```
 
-```{r set_eorking_directory}
+```{r set_working_directory}
 wd <- file.path("D:/",
                 "R-Projects",
                 "Quora",
@@ -65,22 +64,33 @@ In this section we draw a histogram.  We will use the $log_2(n)$ rule to determi
 
 ```{r compute_statistics}
 
-###############################################################################
+#############################################################################
 # Compute mean, median, and mode, see we can plot their position on the
 # histogram we will draw.
-###############################################################################
+#############################################################################
 
 mean_bt   <- round( mean( BodyTemp50$BodyTemp ),1 )
 median_bt <- round( median( BodyTemp50$BodyTemp ),1)
 mode_bt   <- Mode(  BodyTemp50$BodyTemp, na.rm = TRUE )
 
-mean_bt
-median_bt
-mode_bt
+text_mean <- paste0( "Mean = ",
+                     format( mean_bt, nsmall = 1))
+
+text_median <- paste0( "Median = ",
+                     format( median_bt, nsmall = 1))
+
+text_mode <- paste0( "Mode = ",
+                     format(mode_bt, nsmall = 1))
+                                
+
+text_median <- format( mean_bt,
+                       nsmall = 1,
+                       big.mark = 1 )
 
 limits <- pretty( BodyTemp50$BodyTemp, 
                   n = 5,
                   high.u.bias = 10 )
+limits
 ```
 
 ### Drawing the histogram with ggplot2
@@ -93,27 +103,22 @@ scale_y <- seq( from = 0,
                 to   = 30,
                 by   = 5 )
 
- mean_bt
- median_bt
- mode_bt
- 
- 
- 
 temp50 <- 
     ggplot( BodyTemp50, aes( x = BodyTemp )) +
         geom_histogram( binwidth = limits[2] - limits[1],
                       color = "black",
                        fill = "white" ) +
         geom_vline( xintercept = mean_bt,   color = "red") +
-        geom_vline( xintercept = median_bt, color="blue")  +
+        geom_vline( xintercept = median_bt, color="orange")  +
+        geom_vline( xintercept = mode_bt, color = "blue" ) +
         annotate( "text",
                    x = 96, y = 25,
-                   label = "Mean:   98.3",
+                   label =  text_mean,
                    hjust = 0,
                    color = "red") +
          annotate( "text",
                     x = 96, y = 23,
-                    label = "Median: 98.2",
+                    label = paste( "Median:", text_median ),
                     hjust = 0,
                     color = "blue") +
          annotate( "text",
@@ -262,12 +267,12 @@ interval <- interval[2:length(interval)]
 interval 
 
 
-################################################################################
+#############################################################################
 # We compute the mean, median, and mode of interval.  We tound them to 1
 # decimal place.  Note that because the mode uses a data value that occurs 
-# most often it will already be an integer value and therefore does not need to
-# be rounded.
-################################################################################
+# most often it will already be an integer value and therefore does not 
+# need to be rounded.
+#############################################################################
 
 ( mean_interval  <- round( mean( interval  ), 1 ))
 
@@ -275,9 +280,10 @@ interval
 
 ( mode_interval <- Mode( interval ))
 
-```
 
-Once again we see that the sample mode does not exist in the data.  
+
+```
+.  
 
 We plot the Vesuvius data below.
 
@@ -302,8 +308,8 @@ limits <- pretty( vesuvius$interval,
                   high.u.bias = 10 )
 
 ############################################################################
-# The bin_width is the difference between any two succesive limits.  We
-# use the first two.This must be a positive interger so we subtract the
+# The bin_width is the difference between any two successive limits.  We
+# use the first two.This must be a positive integer so we subtract the
 # limit[1] from Limit[2].
 ############################################################################
 
@@ -314,46 +320,43 @@ bin_width <- limits[2] - limits[1]
 # lines with a key.
 ###########################################################################
 
-vesuvius <- 
-ggplot( vesuvius, aes( x = interval )) +
-    geom_histogram( binwidth =  bin_width,
-                     color = "black",
-                     fill = "white" ) +
-    geom_vline( xintercept = mean_interval,
-                color = "red") +
-    geom_vline( xintercept = median_interval,
-                color = "blue" ) +
-    geom_vline( xintercept = 6,
+plot_vesuvius <- 
+    ggplot( vesuvius, aes( x = interval )) +
+        geom_histogram( binwidth =  bin_width,
+                        color = "black",
+                        fill = "white" ) +
+        geom_vline( xintercept = mean_interval,
+                    color = "red") +
+        geom_vline( xintercept = median_interval,
+                    color = "blue" ) +
+        geom_vline( xintercept = 6,
+                     color = "black" ) +
+        annotate( "text",
+                  x = 100, y = 29,
+                  label = paste( "Mean: ", mean_interval ),
+                  hjust = 0,
+                  color = "red") +
+        annotate( "text",
+                   x = 100, y = 27,
+                   label = paste( "Median:", median_interval ),
+                   hjust = 0,
+                   color = "darkblue" ) +
+        annotate( "text",
+                x = 100, y = 25,
+                label = "Mode:    6.0",
+                 hjust = 0,
                 color = "black" ) +
-    annotate( "text",
-              x = 100, y = 29,
-              label = "Mean:    59.2",
-              hjust = 0,
-              color = "red") +
-    annotate( "text",
-              x = 100, y = 27,
-              label = "Median: 12.0",
-              hjust = 0,
-              color = "darkblue" ) +
-    annotate( "text",
-              x = 100, y = 25,
-              label = "Mode:    6.0",
-              hjust = 0,
-              color = "black" ) +
-    scale_x_continuous( name = "Intervals between eruptions (years)",
-                        breaks = limits,
-                        labels = limits ) +
-    ylab( "Frequency" ) +
-    ggtitle( "Years between the succesive eruprions of Vesuvius" ) +
-    theme_cowplot()
+        ylab( "Frequency" ) +
+        ggtitle( "Years between the succesive eruprions of Vesuvius" ) +
+        theme_cowplot()
 
 fp <- file.path( wd,
                  "plots",
                  "vesuvius.jpeg")
 
-save_plot( fp, vesuvius )
+save_plot( fp, plot_vesuvius )
 
-vesuvius
+plot_vesuvius
 
 ```
 

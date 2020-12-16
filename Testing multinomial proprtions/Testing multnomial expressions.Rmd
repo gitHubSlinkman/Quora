@@ -1,0 +1,55 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+This is an exmple of the multinomial test of proportions also called multinomial goodness of fit.  
+
+This is an example supoose null hypotheesis is:
+
+$$NH: p_A = 0.25, \ p_B = 0.50,\  and\  p_C = 0.25$$
+Our alternative hypothesis is
+$$ AH:NH\ is\ incorrect$$
+Now Suppose we are given the following data:
+
+$$f_A = 21$$
+$$f_B = 49$$
+
+$$f_c = 30$$
+
+Note that there are $f_{Total}`r 21 + 49 +30` .
+
+Now if the null hypothesis is true then we would expect to find folowing number of observations for class $A$:
+
+$$e_A = f_{total} \cdot p_A = 100 \cdot 0.25 = 25$$ 
+
+Likewise for classes $B$ and $C$ we have:
+
+$$e_B = f_{Total} \cdot = 100 * 50 =50$$  
+$$e_C = f_{Total} \cdot p_c = 100 * 0.25 = 25$$
+
+Our test statistic is the Chi-Square
+
+$$X^2 = \Sigma \frac{(o_i - e_i )^2}{e_i}$$
+where the sum is over all the classed in which this calss is 3.
+
+For our data we have
+
+$$X^2 = \frac{( 21 - 25)^2}{25} + \frac{(49-50)^2}{50} + \frac{(30-25)^2 }{25}$$
+When we compute this test statistic we find
+
+$$X^2 = \frac{16}{25} +\frac{1}{50} + \frac{25}{25} = 1.68 $$
+Note that this statistics has only two degrees of freed because of the linear restriction that the cell sums are equal to the total sample size.
+
+If we lookup the chi-square  quantiles for a terst of significance we find for two degress of freedom that the value is `r round( qchisq( 0.05, df=2, lower.tail = F ),2 )`.
+
+Our decision rule is to reject the NH when our computed $X^2$ is greater than the critical value of 5.99.
+
+Hence, we can not reject the null hypothesis.  The sample data is consistent with the null hypothesis.
+
+If you would prefer a p-value we compute it by
+
+$$p-value = 0.5683$$
+
+
+Because the p-value is greater than 0.05 we can not reject the null hypothesis.
