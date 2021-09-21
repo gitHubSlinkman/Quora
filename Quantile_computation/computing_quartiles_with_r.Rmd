@@ -1,0 +1,73 @@
+---
+title: "Computing quartiles with R"
+author: "Craig W. Slinkman"
+date: "9/20/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction
+ 
+This document shows to compute quartiles with R.  It also shows how to use ggplot2 plots to interpret the distribution of the data.
+
+## Quora question
+
+The question that this document answers is:
+
+>Let's suppose we have a small dataset, how to find the quartile variations for the four 
+quartiles in R Studio? I can find Q1 and Q3 using summary function. 
+What about Q1, Q2, Q3 and Q4?
+
+## Approach
+
+$Q1$ is the first quartile, $Q2$ is the 50th percentile, $Q3$ is. 75th percentile, and $Q4$ is the 100th percentile which the maximum observation in the data set. 
+
+The simplest way is to use the R $quantile$ function.  Thus we want to find the 
+following percentiles:  
+
+* Q1 is the $25^{th}$ percentile.  The $25^{th}$ percentile of a set of data is the value at which 25 percent of the data has values less than or equal to it. 
+
+* Q2 is the $50^{th}$ percentile.  This is the median of the data set.  The median is the value such that 50% of the observations in the data set have values less than or equal to this value. 
+
+* Q3 is the $75^{th}$ percentile.  This is the value such that 75% of the observations in the data set have values less than or equal to this value.  
+
+* Q4 is the $100^{th}$ percentile. This is the largest observation in the data set. 
+
+* We can add the following definition for the minimum value in the data set.  We call this the $0^{th}$ percentile because there are no observations in the data set smaller than this value.
+
+## Sample data
+
+We are going to use a data set that is provided by the R.  The name of the data set is USArrests.  The data consists of arrests in the United States for the year 1973 for all fifty states.  
+
+The variable we will be using on this example is $Murders$.
+
+## Preparing R
+I prefer to work in Hadley Wickham's $tidyverse$ data analysis environment. since many of you will not have installed this package we will need to install it.  I also prefer to draw my plots with the $cowplot$ package so you may need to install it also.  If you have installed these packages installed this steps.
+
+```{r}
+install.packages(tidyverse)             # I live in the tidyverse.
+install.packages(cowplot)               # For publishable graphics.
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
