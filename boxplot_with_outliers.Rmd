@@ -1,0 +1,33 @@
+---
+title: "R Notebook"
+output: html_notebookdem
+---
+
+
+## Question
+
+Titanium wants an answer to:
+
+> Which would best display the following data if you wanted to display the numbers which are outliers as well as the mean?	
+  
+## Answer
+
+In my opinion the best approach use to draw a box plot *called a box-and-whisker plot by proposed John tukey Tukey (https://asq.org/quality-resources/quality-glossary/b). We will demonstrate the used of boxplot by using $R$'s $ggplot2$ package by using $ggplot2$ package to drawn a boxplot.
+
+The data set that we will use is called $gapminder$. The $gapminder$ data set contains data about life expectancy, GDP per capita, and population for the country, spanning many decades.
+
+I assume that uou hve the required packages installed.  If not you can install these packages by using the
+the statements below to install the pacckages in R.
+
+```
+install.packages( "tidyverse", "gapminder")
+```
+
+
+
+ 
+We start by telling $R$ that we are going to use $R$'s $tidyverse$ package.  This automate loads the graphics package $ggplot2$.
+
+```{r}
+library( tidyverse )                    # I live in the tidyverse.
+```

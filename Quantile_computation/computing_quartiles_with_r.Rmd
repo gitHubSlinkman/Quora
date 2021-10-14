@@ -47,9 +47,9 @@ The variable we will be using on this example is $Murders$.
 ## Preparing R
 I prefer to work in Hadley Wickham's $tidyverse$ data analysis environment. since many of you will not have installed this package we will need to install it.  I also prefer to draw my plots with the $cowplot$ package so you may need to install it also.  If you have installed these packages installed this steps.
 
-```{r}
-install.packages(tidyverse)             # I live in the tidyverse.
-install.packages(cowplot)               # For publishable graphics.
+```
+install.packages("tidyverse")             # I live in the tidyverse.
+install.packages("cowplot")               # For publishable graphics.
 ```
 
 

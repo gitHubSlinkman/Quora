@@ -1,0 +1,83 @@
+---
+title: How To Show Mean Value in Boxplots with ggplot2"
+author: "Craig W. Slinkman"
+date: "10/13/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Question
+
+Titanium wants an answer to:
+
+> Which would best display the following data if you wanted to display the numbers which are outliers as well as the mean?	
+  
+## Answer
+
+In my opinion the best approach use to draw a box plot *called a box-and-whisker plot by proposed John tukey Tukey (https://asq.org/quality-resources/quality-glossary/b). We will demonstrate the used of boxplot by using $R$'s $ggplot2$ package by using $ggplot2$ package to drawn a boxplot.
+
+The data set that we will use is called $gapminder$. The $gapminder$ data set contains data about life expectancy, GDP per capita, and population for the country, spanning many decades.  This example is based on
+https://datavizpyr.com/how-to-add-mean-mark-to-boxplot-in-ggplot2/.
+
+I assume that uou hve the required packages installed.  If not you can install these packages by using the
+the statements below to install the packages in R.
+
+```
+install.packages( "tidyverse", "gapminder")
+```
+
+
+
+ 
+We start by telling $R$ that we are going to use $R$'s $tidyverse$ package.  This automate loads the graphics package $ggplot2$.
+
+```{r}
+library( tidyverse )                    # I live in the tidyverse.
+library( gapminder )                    # Provides the gapminder data. 
+library( cowplot )                      # For publishable graphics.
+```
+
+We verify that that the gapminder data is available for use br printing the tibble:
+
+```{r}
+gapminder
+```
+
+We start by drawing a boxplot.
+
+```{r}
+p1 <-                                       # Define plot
+    gapminder %>%                     
+        ggplot(aes( continent,
+                   lifeExp, 
+                    fill=continent)) +
+            geom_boxplot() +
+            theme_cowplot() +
+         theme(legend.position = "none")
+p1                                          # Print plot
+```
+
+## Adding the mean to the boxplots
+
+We add the means to the boxplots by using the following statements:
+
+```{r}
+p2 <- p1 + stat_summary(fun.y="mean")
+p2
+```
+Note that the means aooear as black circles.  
+
+## Analysis
+
+We see that each distribution is approximately symetric.  There is a very pronounced difference distributions in the value of the central tendency and dispersion across continents.
+
+## We save the plots for bublication.
+
+```{r}
+save_plot( "boxplot_with_mean.png"
+           p2 )
+```
+
